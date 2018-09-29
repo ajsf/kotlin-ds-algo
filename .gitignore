@@ -1,0 +1,14 @@
+.idea
+out/
+build/
+.gradle
+*.class
+*.log
+*.jar
+hs_err_pid*
+.*iml
+!/gradle/wrapper/gradle-wrapper.jar
+.classpath
+.project
+.settings/
+bin/
