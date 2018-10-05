@@ -1,5 +1,6 @@
 package com.doublea.queue
 
+const val MAX_SIZE = 40
 
 interface Queue<T> {
     fun enqueue(data: T)

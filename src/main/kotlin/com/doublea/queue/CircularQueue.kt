@@ -1,7 +1,5 @@
 package com.doublea.queue
 
-const val MAX_SIZE = 40
-
 private const val EMPTY_VALUE = -1
 
 class CircularQueue<T> : Queue<T> {
