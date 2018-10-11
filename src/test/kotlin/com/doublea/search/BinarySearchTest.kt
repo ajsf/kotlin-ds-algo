@@ -1,5 +1,5 @@
-import com.doublea.search.myBinarySearchImperative
-import com.doublea.search.myBinarySearchRecursive
+package com.doublea.search
+
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
