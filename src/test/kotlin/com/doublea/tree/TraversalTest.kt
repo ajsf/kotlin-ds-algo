@@ -48,4 +48,15 @@ internal class TraversalTest : StringSpec({
         nodeEight.depthFirstInOrder() shouldBe listOf(8)
         nodeEight.depthFirstPostOrder() shouldBe listOf(8)
     }
+
+    "isBst returns true when the connected nodes match the properties for a bst" {
+        val node = Node(5)
+        node.left = Node(3)
+        node.right = Node(9)
+        node.isBst() shouldBe true
+    }
+
+    "isBst returns false when the connected nodes do not match the properties for a bst" {
+        nodeOne.isBst() shouldBe false
+    }
 })

@@ -72,3 +72,15 @@ fun <T> Node<T>.depthFirstPostOrder(): List<T> {
     result.add(data)
     return result
 }
+fun <T : Comparable<T>> Node<T>.isBst(): Boolean {
+    var isBst = true
+    left?.let {
+        if (it.data > this.data) return false
+        isBst = isBst && it.isBst()
+    }
+    right?.let {
+        if (it.data < this.data) return false
+        isBst = isBst && it.isBst()
+    }
+    return isBst
+}

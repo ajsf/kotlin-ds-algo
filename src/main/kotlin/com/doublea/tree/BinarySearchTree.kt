@@ -1,7 +1,7 @@
 package com.doublea.tree
 
 class BinarySearchTree<T : Comparable<T>> {
-    var head: Node<T>? = null
+    private var head: Node<T>? = null
 
     fun insert(data: T) {
         val newNode = Node(data)
@@ -27,4 +27,28 @@ class BinarySearchTree<T : Comparable<T>> {
         }
         return null
     }
+
+    fun findMinimumValue() = findMinimumValue(head)
+
+    private fun findMinimumValue(node: Node<T>?): T? {
+        if (node == null) return null
+        return if (node.left == null) node.data
+        else findMinimumValue(node.left)
+    }
+
+    fun breadthFirstTraversal() = head?.breadthFirstTraversal() ?: listOf()
+
+    fun depthFirstPreOrder() = head?.depthFirstPreOrder() ?: listOf()
+
+    fun depthFirstInOrder() = head?.depthFirstInOrder() ?: listOf()
+
+    fun printWithinRange(start: T, end: T, currentNode: Node<T>? = head) {
+        currentNode?.let {
+            val data = it.data
+            if (data in start..end) println(data)
+            if (data >= start) printWithinRange(start, end, it.left)
+            if (data <= end) printWithinRange(start, end, it.right)
+        }
+    }
+
 }
