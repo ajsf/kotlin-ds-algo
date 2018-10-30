@@ -2,6 +2,7 @@ package com.doublea.queue
 
 private const val EMPTY_VALUE = -1
 
+@Suppress("UNCHECKED_CAST")
 class CircularQueue<T> : Queue<T> {
 
     private var head = EMPTY_VALUE
