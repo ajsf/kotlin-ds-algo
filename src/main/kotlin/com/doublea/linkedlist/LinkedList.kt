@@ -49,7 +49,6 @@ class LinkedList<T : Comparable<T>> : Cloneable {
             current = current?.next
             if (current == null) throw IndexOutOfBoundsException("$index is greater than the length of the list")
         }
-        println("Prev: $prev, Current: $current")
         prev?.next = current?.next
         count--
 

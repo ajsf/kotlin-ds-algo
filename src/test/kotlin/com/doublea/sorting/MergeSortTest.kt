@@ -10,8 +10,6 @@ internal class MergeSortTest : StringSpec({
     "it sorts out of place" {
         val list = unsortedArray.copyOf().toMutableList()
         val newList = list.mergeSort()
-        list.print()
-        newList.print()
         newList.forEachIndexed { index, int ->
             int shouldBe sortedArray[index]
         }
@@ -24,8 +22,6 @@ internal class MergeSortTest : StringSpec({
         val list = (intArrayOf(2, 6, 8, 124, 6, 0, 4, 89) + unsortedArray.copyOf()).toMutableList()
         val expected = mutableListOf(0, 1, 2, 2, 3, 4, 4, 5, 6, 6, 6, 7, 8, 8, 9, 10, 89, 124)
         val newList = list.mergeSort()
-        list.print()
-        newList.print()
         newList.forEachIndexed { index, int ->
             int shouldBe expected[index]
         }

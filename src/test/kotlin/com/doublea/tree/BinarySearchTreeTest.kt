@@ -50,5 +50,4 @@ internal class BinarySearchTreeTest : StringSpec({
         val tree = BinarySearchTree<Int>()
         tree.findMinimumValue() shouldBe null
     }
-
 })

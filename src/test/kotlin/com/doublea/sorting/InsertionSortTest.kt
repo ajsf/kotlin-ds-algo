@@ -18,7 +18,6 @@ internal class InsertionSortTest : StringSpec({
         val list = (intArrayOf(2, 6, 8, 124, 6, 0, 4, 89) + unsortedArray.copyOf()).toMutableList()
         val expected = mutableListOf(0, 1, 2, 2, 3, 4, 4, 5, 6, 6, 6, 7, 8, 8, 9, 10, 89, 124)
         list.insertionSort()
-        list.print()
         list.forEachIndexed { index, int ->
             int shouldBe expected[index]
         }

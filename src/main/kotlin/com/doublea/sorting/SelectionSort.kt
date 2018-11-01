@@ -5,7 +5,6 @@ fun <T : Comparable<T>> MutableList<T>.selectionSort() {
         for (j in i + 1 until this.size) {
             if (this[j] < this[i]) {
                 this.swap(i, j)
-                this.print()
             }
         }
     }
