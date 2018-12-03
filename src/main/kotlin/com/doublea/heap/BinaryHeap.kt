@@ -2,19 +2,20 @@ package com.doublea.heap
 
 abstract class BinaryHeap<T : Comparable<T>> {
 
-    private val list: MutableList<T> = mutableListOf()
+    protected val list: MutableList<T> = mutableListOf()
+
+    protected fun parentIndex(i: Int) = (i - 1) / 2
+
+    protected abstract fun compareFunction(first: T, second: T): Boolean
 
     private fun leftChildIndex(i: Int) = 2 * i + 1
     private fun rightChildIndex(i: Int) = 2 * i + 2
-    private fun parentIndex(i: Int) = (i - 1) / 2
 
     private fun getLeftChild(index: Int): T? = list.getOrNull(leftChildIndex(index))
 
     private fun getRightChild(index: Int): T? = list.getOrNull(rightChildIndex(index))
 
     private fun getParent(index: Int): T? = list.getOrNull(parentIndex(index))
-
-    private fun isEmpty(): Boolean = list.size == 0
 
     private fun getElementAtIndex(index: Int): T? = list.getOrNull(index)
 
@@ -60,7 +61,7 @@ abstract class BinaryHeap<T : Comparable<T>> {
         }
     }
 
-    protected abstract fun compareFunction(first: T, second: T): Boolean
+    fun isEmpty(): Boolean = list.size == 0
 
     fun insert(data: T) {
         list.add(data)
@@ -75,4 +76,6 @@ abstract class BinaryHeap<T : Comparable<T>> {
         siftDown(0)
         return itemToRemove
     }
+
+    fun getHighestPriority() = list.firstOrNull()
 }
