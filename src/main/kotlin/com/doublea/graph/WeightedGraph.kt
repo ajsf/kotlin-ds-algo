@@ -1,14 +1,50 @@
 package com.doublea.graph
 
-import java.lang.RuntimeException
 import java.util.*
 import kotlin.Comparator
 
-interface WeightedGraph : Graph {
-    fun addEdge(v1: Int, v2: Int, weight: Int)
+abstract class WeightedGraph : Graph() {
+    abstract fun addEdge(v1: Int, v2: Int, weight: Int)
+
+    override fun shortestPath(v1: Int, v2: Int): List<Int> {
+        if (v1 >= numVertices || v1 < 0) throw IllegalArgumentException("Argument v1 is invalid vertex: $v1")
+        if (v2 >= numVertices || v2 < 0) throw IllegalArgumentException("Argument v2 is invalid vertex: $v2")
+
+        val distanceTable = createDistanceTable(v1)
+        return distanceTable.getPath(v1, v2)
+    }
+
+    private fun createDistanceTable(v1: Int): Map<Int, Graph.DistanceTableEntry> {
+        val distanceTable = (0 until numVertices).map { it to Graph.DistanceTableEntry(Int.MAX_VALUE) }.toMap()
+        distanceTable[v1]!!.distance = 0
+        distanceTable[v1]!!.lastVertex = v1
+
+        val toVisit = PriorityQueue<Pair<Int, Int>>(Comparator<Pair<Int, Int>> { p0, p1 -> p0.second.compareTo(p1.second) })
+        toVisit.add(v1 to 0)
+
+        while (toVisit.isNotEmpty()) {
+            val v = toVisit.poll()
+            val edges = getAdjacentEdges(v.first)
+            edges.forEach { edge ->
+                distanceTable[edge.toVertex]?.let { entry ->
+                    val newDistance = v.second + edge.weight
+                    if (newDistance < entry.distance) {
+                        entry.distance = newDistance
+                        entry.lastVertex = v.first
+                        toVisit.add(edge.toVertex to newDistance)
+                    }
+                }
+            }
+        }
+        return distanceTable
+    }
+
+    protected abstract fun getAdjacentEdges(v: Int): Set<WeightedEdge>
+
+    protected data class WeightedEdge(val toVertex: Int, val weight: Int)
 }
 
-class WeightedAdjacencySetGraph(override val numVertices: Int, override val graphType: GraphType) : WeightedGraph {
+class WeightedAdjacencySetGraph(override val numVertices: Int, override val graphType: GraphType) : WeightedGraph() {
 
     private val adjacencySet = MutableList(numVertices) { mutableSetOf<WeightedEdge>() }
 
@@ -26,48 +62,5 @@ class WeightedAdjacencySetGraph(override val numVertices: Int, override val grap
         return adjacencySet[v].map { it.toVertex }.sorted()
     }
 
-    override fun shortestPath(v1: Int, v2: Int): List<Int> {
-        if (v1 >= numVertices || v1 < 0) throw IllegalArgumentException("Argument v1 is invalid vertex: $v1")
-        if (v2 >= numVertices || v2 < 0) throw IllegalArgumentException("Argument v2 is invalid vertex: $v2")
-
-        val distanceTable = createDistanceTable(v1)
-
-        val result = mutableListOf<Int>()
-        var v = v2
-        while (v != v1) {
-            if (v == -1) throw RuntimeException("There is no connection from vertex $v1 to vertex $v2")
-            result.add(v)
-            v = distanceTable[v]!!.lastVertex
-        }
-        result.add(v)
-        return result.reversed()
-    }
-
-    private fun createDistanceTable(v1: Int): Map<Int, Graph.DistanceTableEntry> {
-        val distanceTable = (0 until numVertices).map { it to Graph.DistanceTableEntry(Int.MAX_VALUE) }.toMap()
-        distanceTable[v1]!!.distance = 0
-        distanceTable[v1]!!.lastVertex = v1
-
-        val toVisit = PriorityQueue<Pair<Int, Int>>(Comparator<Pair<Int, Int>> { p0, p1 -> p0.second.compareTo(p1.second) })
-        toVisit.add(v1 to 0)
-
-        while (toVisit.isNotEmpty()) {
-            val v = toVisit.poll()
-            val edges = adjacencySet[v.first]
-            edges.forEach { edge ->
-                println(toVisit)
-                distanceTable[edge.toVertex]?.let { entry ->
-                    val newDistance = v.second + edge.weight
-                    if (newDistance < entry.distance) {
-                        entry.distance = newDistance
-                        entry.lastVertex = v.first
-                        toVisit.add(edge.toVertex to newDistance)
-                    }
-                }
-            }
-        }
-        return distanceTable
-    }
-
-    private data class WeightedEdge(val toVertex: Int, val weight: Int)
+    override fun getAdjacentEdges(v: Int): Set<WeightedEdge> = adjacencySet[v]
 }

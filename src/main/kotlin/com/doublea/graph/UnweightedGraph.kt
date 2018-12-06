@@ -1,9 +1,7 @@
 package com.doublea.graph
 
-import java.lang.RuntimeException
-
-interface UnweightedGraph : Graph {
-    fun addEdge(v1: Int, v2: Int)
+abstract class UnweightedGraph : Graph() {
+    abstract fun addEdge(v1: Int, v2: Int)
 
     override fun shortestPath(v1: Int, v2: Int): List<Int> {
         if (v1 >= numVertices || v1 < 0) throw IllegalArgumentException("Argument v1 is invalid vertex: $v1")
@@ -11,15 +9,7 @@ interface UnweightedGraph : Graph {
 
         val distanceTable = createDistanceTable(v1)
 
-        val result = mutableListOf<Int>()
-        var v = v2
-        while (v != v1) {
-            if (v == -1) throw RuntimeException("There is no connection from vertex $v1 to vertex $v2")
-            result.add(v)
-            v = distanceTable[v]!!.lastVertex
-        }
-        result.add(v)
-        return result.reversed()
+        return distanceTable.getPath(v1, v2)
     }
 
     private fun createDistanceTable(v1: Int): Map<Int, Graph.DistanceTableEntry> {
@@ -46,7 +36,7 @@ interface UnweightedGraph : Graph {
     }
 }
 
-class AdjacencyMatrixGraph(override val numVertices: Int, override val graphType: GraphType) : UnweightedGraph {
+class AdjacencyMatrixGraph(override val numVertices: Int, override val graphType: GraphType) : UnweightedGraph() {
 
     private val adjacencyMatrix = MutableList(numVertices) { MutableList(numVertices) { false } }
 
@@ -67,7 +57,7 @@ class AdjacencyMatrixGraph(override val numVertices: Int, override val graphType
     }
 }
 
-class AdjacencySetGraph(override val numVertices: Int, override val graphType: GraphType) : UnweightedGraph {
+class AdjacencySetGraph(override val numVertices: Int, override val graphType: GraphType) : UnweightedGraph() {
 
     private val adjacencySet = MutableList(numVertices) { mutableSetOf<Int>() }
 

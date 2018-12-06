@@ -5,12 +5,17 @@ import java.lang.RuntimeException
 
 enum class GraphType { DIRECTED, UNDIRECTED }
 
-interface Graph {
+interface GraphInterface {
 
     val numVertices: Int
     val graphType: GraphType
 
     fun getAdjacentVertices(v: Int): List<Int>
+
+    fun shortestPath(v1: Int, v2: Int): List<Int>
+}
+
+abstract class Graph : GraphInterface {
 
     fun depthFirstTraversal(vertex: Int): Set<Int> {
         fun dft(visited: MutableSet<Int>, currentVertex: Int) {
@@ -74,8 +79,18 @@ interface Graph {
         return true
     }
 
-    fun shortestPath(v1: Int, v2: Int) : List<Int>
+    protected data class DistanceTableEntry(var distance: Int, var lastVertex: Int = -1)
 
-    data class DistanceTableEntry(var distance: Int, var lastVertex: Int = -1)
+    protected fun Map<Int, Graph.DistanceTableEntry>.getPath(v1: Int, v2: Int): List<Int> {
+        val result = mutableListOf<Int>()
+        var v = v2
+        while (v != v1) {
+            if (v == -1) throw RuntimeException("There is no connection from vertex $v1 to vertex $v2")
+            result.add(v)
+            v = get(v)!!.lastVertex
+        }
+        result.add(v)
+        return result.reversed()
+    }
 }
 

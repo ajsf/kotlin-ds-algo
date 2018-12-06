@@ -69,13 +69,13 @@ internal class WeightedAdjacencyGraphTest : StringSpec({
         graph.addEdge(2, 4, 2)
         graph.addEdge(4, 3, 10)
 
-        //graph.shortestPath(0, 3) shouldBe listOf(0, 2, 4, 3)
+        graph.shortestPath(0, 3) shouldBe listOf(0, 2, 4, 3)
 
         graph.addEdge(4, 1, 2)
 
-        //graph.shortestPath(0, 3) shouldBe listOf(0, 2, 4, 1, 3)
-        //graph.shortestPath(1, 3) shouldBe listOf(1, 3)
-        //graph.shortestPath(2, 1) shouldBe listOf(2, 4, 1)
+        graph.shortestPath(0, 3) shouldBe listOf(0, 2, 4, 1, 3)
+        graph.shortestPath(1, 3) shouldBe listOf(1, 3)
+        graph.shortestPath(2, 1) shouldBe listOf(2, 4, 1)
 
         graph.addEdge(0, 1, 2)
 
