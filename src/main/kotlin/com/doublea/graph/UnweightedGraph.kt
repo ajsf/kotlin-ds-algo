@@ -5,7 +5,7 @@ import java.lang.RuntimeException
 interface UnweightedGraph : Graph {
     fun addEdge(v1: Int, v2: Int)
 
-    fun shortestPath(v1: Int, v2: Int): List<Int> {
+    override fun shortestPath(v1: Int, v2: Int): List<Int> {
         if (v1 >= numVertices || v1 < 0) throw IllegalArgumentException("Argument v1 is invalid vertex: $v1")
         if (v2 >= numVertices || v2 < 0) throw IllegalArgumentException("Argument v2 is invalid vertex: $v2")
 
@@ -22,8 +22,8 @@ interface UnweightedGraph : Graph {
         return result.reversed()
     }
 
-    private fun createDistanceTable(v1: Int): Map<Int, DistanceTableEntry> {
-        val distanceTable = (0 until numVertices).map { it to DistanceTableEntry() }.toMap()
+    private fun createDistanceTable(v1: Int): Map<Int, Graph.DistanceTableEntry> {
+        val distanceTable = (0 until numVertices).map { it to Graph.DistanceTableEntry(-1) }.toMap()
         distanceTable[v1]!!.distance = 0
         distanceTable[v1]!!.lastVertex = v1
 
@@ -44,8 +44,6 @@ interface UnweightedGraph : Graph {
         }
         return distanceTable
     }
-
-    private data class DistanceTableEntry(var distance: Int = -1, var lastVertex: Int = -1)
 }
 
 class AdjacencyMatrixGraph(override val numVertices: Int, override val graphType: GraphType) : UnweightedGraph {

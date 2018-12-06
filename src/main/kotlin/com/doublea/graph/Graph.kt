@@ -73,5 +73,9 @@ interface Graph {
         }
         return true
     }
+
+    fun shortestPath(v1: Int, v2: Int) : List<Int>
+
+    data class DistanceTableEntry(var distance: Int, var lastVertex: Int = -1)
 }
 

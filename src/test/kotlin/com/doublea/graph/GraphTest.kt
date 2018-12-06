@@ -135,7 +135,6 @@ internal class AdjacencySetGraphTest : StringSpec({
         shouldThrow<RuntimeException> {
             graph.shortestPath(2, 0)
         }
-
     }
 })
 
