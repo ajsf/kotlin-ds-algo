@@ -3,6 +3,7 @@ package com.doublea.graph
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
+import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
 
 internal class WeightedAdjacencyGraphTest : StringSpec({
@@ -102,6 +103,33 @@ internal class WeightedAdjacencyGraphTest : StringSpec({
         graph.addEdge(4, 1, 2)
         shouldThrow<RuntimeException> {
             graph.shortestPath(2, 0)
+        }
+    }
+
+    "bellmanFordShortestPath works for graphs with negative weighted edges" {
+        val graph = WeightedAdjacencySetGraph(5, GraphType.DIRECTED)
+        graph.addEdge(0, 1, 2)
+        graph.addEdge(0, 2, 1)
+        graph.addEdge(1, 3, 3)
+        graph.addEdge(1, 4, -2)
+        graph.addEdge(2, 1, -5)
+        graph.addEdge(2, 4, 2)
+        graph.addEdge(4, 3, 1)
+
+        graph.bellmanFordShortestPath(0, 3) shouldBe listOf(0, 2, 1, 4, 3)
+    }
+
+    "bellmanFordShortestPath throws an IllegalArgumentException for graphs with negative cycles" {
+        val graph = WeightedAdjacencySetGraph(5, GraphType.DIRECTED)
+        graph.addEdge(0, 1, 2)
+        graph.addEdge(0, 2, 3)
+        graph.addEdge(1, 4, -5)
+        graph.addEdge(2, 4, 6)
+        graph.addEdge(3, 1, 2)
+        graph.addEdge(4, 3, -4)
+
+        shouldThrow<IllegalArgumentException> {
+            graph.bellmanFordShortestPath(1, 3)
         }
     }
 })

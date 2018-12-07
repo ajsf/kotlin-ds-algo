@@ -81,6 +81,15 @@ abstract class Graph : GraphInterface {
 
     protected data class DistanceTableEntry(var distance: Int, var lastVertex: Int = -1)
 
+    protected fun createDistanceTable(size: Int, defaultDistance: Int, source: Int): Map<Int, DistanceTableEntry> {
+        val table = (0 until size)
+                .map { it to Graph.DistanceTableEntry(defaultDistance) }
+                .toMap()
+        table[source]!!.distance = 0
+        table[source]!!.lastVertex = source
+        return table
+    }
+
     protected fun Map<Int, Graph.DistanceTableEntry>.getPath(v1: Int, v2: Int): List<Int> {
         val result = mutableListOf<Int>()
         var v = v2

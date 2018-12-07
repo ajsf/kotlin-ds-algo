@@ -13,9 +13,7 @@ abstract class UnweightedGraph : Graph() {
     }
 
     private fun createDistanceTable(v1: Int): Map<Int, Graph.DistanceTableEntry> {
-        val distanceTable = (0 until numVertices).map { it to Graph.DistanceTableEntry(-1) }.toMap()
-        distanceTable[v1]!!.distance = 0
-        distanceTable[v1]!!.lastVertex = v1
+        val distanceTable = createDistanceTable(numVertices, -1, v1)
 
         val toVisit = mutableListOf(v1)
 
